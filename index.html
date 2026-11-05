@@ -1,0 +1,872 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Snoopie First-Alert Onboarding</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column for the argument, widening to a prototype + rationale split for the live demo.
+   Page wears Snoopie's ink-and-icon-gradient; the prototype frame stays Shopify-admin light on purpose. */
+:root{
+  --bg:#FFFFFF; --panel:#F4F4F1; --line:#E2E1DA; --ink:#151513; --muted:#5D5B54;
+  --yellow:#FCD854; --orange:#FC9C54; --accent-text:#A24F0B; --hl:rgba(252,216,84,.6);
+  --ok:#1D7A4C; --warn:#9A5200;
+  /* Shopify admin surfaces, light in both themes like the real admin */
+  --a-bg:#F1F1F1; --a-card:#FFFFFF; --a-line:#E3E3E3; --a-field-line:#8A8A8A; --a-ink:#303030; --a-muted:#616161;
+  --a-green:#007A5A; --a-green-hover:#00634A; --a-on-green:#FFFFFF; --a-sel:#FFF7D6; --a-sel-line:#1A1A1A;
+  --a-focus:#005BD3; --a-ok-bg:#CDFEE1; --a-ok-ink:#0C5132; --a-info-bg:#F3F3F3; --a-err:#B42318; --a-shadow:rgba(0,0,0,.12);
+  --f-display:"Bricolage Grotesque", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --f-admin:-apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121211; --panel:#1B1B19; --line:#2F2E2A; --ink:#F1F0EA; --muted:#A6A398;
+  --accent-text:#FCB454; --hl:rgba(252,216,84,.3); --ok:#4CC38A; --warn:#F0A44B; --a-shadow:rgba(0,0,0,.5); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121211; --panel:#1B1B19; --line:#2F2E2A; --ink:#F1F0EA; --muted:#A6A398;
+  --accent-text:#FCB454; --hl:rgba(252,216,84,.3); --ok:#4CC38A; --warn:#F0A44B; --a-shadow:rgba(0,0,0,.5); color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 72px}
+.wrap{max-width:1120px;margin:0 auto}
+.col{max-width:720px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-weight:800;font-size:clamp(2.2rem,5.4vw,3.9rem);line-height:1.02}
+h2{font-weight:800;font-size:clamp(1.6rem,3vw,2.15rem);line-height:1.1}
+h3{font-weight:600;font-size:1.15rem;line-height:1.25}
+p{margin:0}
+.mark{background:linear-gradient(transparent 58%, var(--hl) 58%);padding:0 .08em}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:62ch}
+section{padding-block:64px 0;display:grid;gap:22px}
+section > header{display:grid;gap:10px}
+.rule{height:1px;background:var(--line);margin-top:64px}
+
+/* top */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em}
+.brand i{width:30px;height:30px;border-radius:8px;background:linear-gradient(90deg,var(--yellow),var(--orange));display:inline-block}
+.meta{display:flex;gap:8px 18px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.76rem;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:500}
+.hero{padding-block:56px 8px;display:grid;gap:22px}
+
+/* stat strip */
+.counts{display:flex;flex-wrap:wrap;gap:12px}
+.count{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.count strong{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-size:.9rem;color:var(--muted)}
+.count.after strong{color:var(--accent-text)}
+.arrow{align-self:center;color:var(--muted);font-family:var(--f-mono)}
+
+/* today mocks */
+.today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.shot{display:grid;gap:10px;min-width:0}
+.shot figcaption{font-size:.85rem;color:var(--muted)}
+.screen{position:relative;background:var(--a-bg);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:var(--f-admin);color:var(--a-ink);font-size:11px;min-height:250px;overflow:hidden}
+.screen .bar{font-weight:600;font-size:12px;margin-bottom:10px;display:flex;gap:6px;align-items:center}
+.screen .card{background:var(--a-card);border-radius:8px;padding:12px;box-shadow:0 1px 2px var(--a-shadow)}
+.mini-btn{display:inline-block;background:var(--a-green);color:var(--a-on-green);border-radius:6px;padding:4px 9px;font-weight:600;font-size:10.5px}
+.mfield{display:grid;gap:3px;margin-bottom:7px}
+.mfield span{font-size:9.5px;color:var(--a-ink)}
+.mfield span em{color:var(--a-err);font-style:normal}
+.mfield div{height:13px;border:1px solid var(--a-line);border-radius:4px;background:var(--a-card)}
+.mtable{display:grid;gap:0;border-radius:8px;overflow:hidden;background:var(--a-card);box-shadow:0 1px 2px var(--a-shadow)}
+.mtable div{display:grid;grid-template-columns:1.2fr 1fr .7fr;gap:6px;padding:7px 9px;border-bottom:1px solid var(--a-line);font-size:10px}
+.mtable div:first-child{color:var(--a-muted);background:var(--a-info-bg)}
+.pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font:500 11px/22px var(--f-mono);text-align:center;box-shadow:0 0 0 3px var(--yellow)}
+.friction{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;padding:0;margin:0;list-style:none;counter-reset:f}
+.friction li{display:grid;grid-template-columns:26px 1fr;gap:10px;min-width:0}
+.friction li::before{counter-increment:f;content:counter(f);width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font:500 11px/22px var(--f-mono);text-align:center;margin-top:2px}
+.friction b{font-weight:600}
+
+/* goal */
+.goal{border-left:3px solid var(--ink);padding:4px 0 4px 18px;font-family:var(--f-display);font-weight:600;font-size:clamp(1.25rem,2.4vw,1.6rem);line-height:1.3;max-width:34ch}
+
+/* prototype */
+.proto-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.proto-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.frame{background:var(--a-bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-family:var(--f-admin);color:var(--a-ink);font-size:14px;line-height:1.45;box-shadow:0 18px 40px -24px var(--a-shadow);position:relative}
+.frame-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--a-bg);border-bottom:1px solid var(--a-line);font-weight:600;font-size:14px}
+.frame-bar .crumb{display:flex;align-items:center;gap:8px}
+.frame-bar .dots{color:var(--a-muted);letter-spacing:2px}
+.stage{padding:24px 20px 28px;min-height:560px;display:grid;align-content:start}
+.wcard{background:var(--a-card);border-radius:12px;box-shadow:0 1px 0 var(--a-line),0 1px 3px var(--a-shadow);max-width:600px;width:100%;margin:0 auto;overflow:hidden}
+.wbody{padding:22px 22px 8px;display:grid;gap:16px}
+.wfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 22px;border-top:1px solid var(--a-line);margin-top:14px;flex-wrap:wrap}
+.wfoot .right{display:flex;gap:8px;margin-left:auto}
+.progress{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--a-muted)}
+.progress .segs{display:flex;gap:4px}
+.progress .segs i{width:34px;height:4px;border-radius:2px;background:var(--a-line)}
+.progress .segs i.on{background:linear-gradient(90deg,var(--yellow),var(--orange))}
+.wtitle{font-size:20px;font-weight:650;line-height:1.25;color:var(--a-ink);margin:0}
+.wsub{color:var(--a-muted);margin:0}
+.welcome{font-size:12px;color:var(--a-muted);display:flex;align-items:center;gap:8px}
+.welcome i{width:18px;height:18px;border-radius:5px;background:linear-gradient(90deg,var(--yellow),var(--orange));display:inline-block}
+
+.btn{font:inherit;font-weight:600;font-size:13px;border-radius:8px;padding:7px 14px;cursor:pointer;border:1px solid var(--a-line);background:var(--a-card);color:var(--a-ink);box-shadow:0 1px 0 var(--a-line)}
+.btn:hover{background:var(--a-info-bg)}
+.btn.primary{background:var(--a-green);color:var(--a-on-green);border-color:var(--a-green)}
+.btn.primary:hover{background:var(--a-green-hover)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.link{border:0;box-shadow:none;background:none;color:var(--a-muted);font-weight:500;padding:7px 4px;text-decoration:underline;text-underline-offset:2px}
+.btn:focus-visible,.opt:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,.seg button:focus-visible{outline:2px solid var(--a-focus);outline-offset:2px}
+
+.seg{display:inline-flex;background:var(--a-info-bg);border-radius:9px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:13px;border:0;background:none;color:var(--a-muted);padding:6px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--a-card);color:var(--a-ink);font-weight:600;box-shadow:0 1px 2px var(--a-shadow)}
+.fld{display:grid;gap:6px}
+.fld label{font-size:13px;font-weight:550}
+.row{display:flex;gap:8px}
+.row > input{flex:1;min-width:0}
+.in{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--a-field-line);border-radius:8px;background:var(--a-card);color:var(--a-ink);width:100%}
+textarea.in{min-height:70px;resize:vertical}
+.hint{font-size:12.5px;color:var(--a-muted)}
+.err{font-size:12.5px;color:var(--a-err)}
+.textlink{font:inherit;font-size:12.5px;background:none;border:0;padding:0;color:var(--a-focus);text-decoration:underline;cursor:pointer}
+.found{display:flex;gap:12px;align-items:center;border:1px solid var(--a-line);border-radius:10px;padding:12px}
+.found .logo{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,var(--yellow),var(--orange));display:grid;place-items:center;font-weight:700;color:#1A1A1A;flex:none}
+.found .what{min-width:0;flex:1}
+.found .what b{display:block}
+.found .what span{font-size:12.5px;color:var(--a-muted);overflow-wrap:anywhere}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:999px;padding:2px 8px;background:var(--a-ok-bg);color:var(--a-ok-ink);white-space:nowrap}
+.badge.soft{background:var(--a-info-bg);color:var(--a-muted);font-weight:500}
+.spin{width:14px;height:14px;border:2px solid var(--a-line);border-top-color:var(--a-ink);border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{font:inherit;text-align:left;border:1px solid var(--a-line);border-radius:10px;background:var(--a-card);padding:12px 14px;cursor:pointer;display:grid;gap:3px;color:var(--a-ink);position:relative}
+.opt:hover{border-color:var(--a-field-line)}
+.opt[aria-checked="true"]{border:2px solid var(--a-sel-line);background:var(--a-sel);padding:11px 13px}
+.opt b{font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.opt span{font-size:12.5px;color:var(--a-muted)}
+.opt .tag{font-size:11px;font-weight:600;background:linear-gradient(90deg,var(--yellow),var(--orange));color:#1A1A1A;border-radius:999px;padding:1px 7px}
+.thresh{border:1px solid var(--a-line);border-radius:10px;padding:14px;display:grid;gap:10px;background:var(--a-card)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{font:inherit;font-size:13px;border:1px solid var(--a-line);background:var(--a-card);color:var(--a-ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--a-ink);color:var(--a-card);border-color:var(--a-ink)}
+.chip-in{width:64px;padding:5px 8px;font-size:13px}
+.example{font-size:13px;background:var(--a-info-bg);border-radius:8px;padding:9px 11px;font-variant-numeric:tabular-nums}
+details.more summary{cursor:pointer;font-size:13px;color:var(--a-ink);font-weight:550}
+details.more[open] summary{margin-bottom:8px}
+.emails{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--a-field-line);border-radius:8px;padding:6px;background:var(--a-card)}
+.etag{display:inline-flex;align-items:center;gap:6px;background:var(--a-info-bg);border-radius:6px;padding:3px 4px 3px 8px;font-size:13px;max-width:100%;overflow-wrap:anywhere}
+.etag button{font:inherit;border:0;background:none;cursor:pointer;color:var(--a-muted);width:20px;height:20px;border-radius:4px;line-height:1}
+.etag button:hover{background:var(--a-line)}
+.emails input{border:0;outline:0;flex:1;min-width:140px;font:inherit;font-size:13px;padding:4px;background:transparent;color:var(--a-ink)}
+.note{display:flex;gap:10px;background:var(--a-info-bg);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--a-ink)}
+.note svg{flex:none;margin-top:2px}
+
+.done-top{display:flex;gap:14px;align-items:center}
+.seal{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),var(--orange));display:grid;place-items:center;flex:none}
+.summary{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:13.5px;border:1px solid var(--a-line);border-radius:10px;padding:12px 14px}
+.summary dt{color:var(--a-muted)}
+.summary dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.mail{border:1px solid var(--a-line);border-radius:10px;overflow:hidden;font-size:13px}
+.mail-head{background:var(--a-info-bg);padding:9px 12px;display:grid;gap:2px}
+.mail-head b{font-weight:600}
+.mail-head span{color:var(--a-muted);font-size:12px}
+.mail-body{padding:14px 16px;display:grid;gap:8px;background:var(--a-card)}
+.mail-body .wm{font-weight:800;font-size:18px;letter-spacing:-.03em}
+.mail-body .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-variant-numeric:tabular-nums}
+.mail-body .kv span{color:var(--a-muted)}
+.mail-cap{font-size:12px;color:var(--a-muted)}
+.toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#1A1A1A;color:#FFFFFF;border-radius:10px;padding:10px 14px;font-size:13px;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:5}
+
+.page{display:grid;gap:14px;max-width:760px;width:100%;margin:0 auto}
+.check{background:var(--a-card);border-radius:12px;box-shadow:0 1px 0 var(--a-line),0 1px 3px var(--a-shadow);padding:16px 18px;display:grid;gap:12px}
+.check-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.check-head b{font-size:15px}
+.pbar{height:6px;border-radius:3px;background:var(--a-line);overflow:hidden}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--yellow),var(--orange))}
+.items{list-style:none;margin:0;padding:0;display:grid}
+.items li{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--a-line);flex-wrap:wrap}
+.items .tick{width:20px;height:20px;border-radius:50%;border:1.5px dashed var(--a-field-line);flex:none;display:grid;place-items:center}
+.items .tick.on{border:0;background:var(--a-ink)}
+.items .txt{flex:1;min-width:160px}
+.items .txt b{display:block;font-size:13.5px;font-weight:600}
+.items .txt span{font-size:12.5px;color:var(--a-muted)}
+.items li.isdone .txt b{color:var(--a-muted);text-decoration:line-through}
+.tbl-wrap{background:var(--a-card);border-radius:12px;box-shadow:0 1px 0 var(--a-line),0 1px 3px var(--a-shadow);overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+.tbl th{text-align:left;font-weight:500;color:var(--a-muted);font-size:12px;background:var(--a-info-bg);padding:9px 12px}
+.tbl td{padding:11px 12px;border-top:1px solid var(--a-line);vertical-align:top}
+.tbl td small{display:block;color:var(--a-muted);font-size:12px}
+.empty{background:var(--a-card);border-radius:12px;box-shadow:0 1px 0 var(--a-line),0 1px 3px var(--a-shadow);padding:22px;display:grid;gap:10px;justify-items:start}
+
+/* rationale panel */
+.why{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);display:grid;gap:14px}
+.steps-nav{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.steps-nav button{font:inherit;width:100%;text-align:left;border:1px solid transparent;background:none;color:var(--muted);padding:7px 10px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.steps-nav button:hover{background:var(--panel)}
+.steps-nav button[aria-current="step"]{border-color:var(--line);background:var(--panel);color:var(--ink);font-weight:600}
+.steps-nav .n{font-family:var(--f-mono);font-size:.72rem;width:22px;color:var(--muted)}
+.steps-nav button:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+.why-card{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;background:var(--bg)}
+.why-card h3{font-size:1.1rem}
+.why-card ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:.92rem}
+.eng{font-family:var(--f-mono);font-size:.72rem;background:var(--hl);color:var(--ink);border-radius:4px;padding:1px 5px;white-space:nowrap}
+.restart{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.restart:hover{background:var(--panel)}
+
+/* field table */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.ft{width:100%;border-collapse:collapse;min-width:640px;font-size:.93rem}
+.ft th{text-align:left;font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 14px;background:var(--panel)}
+.ft td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+.ft td:first-child{font-weight:500}
+.how{display:inline-block;font-family:var(--f-mono);font-size:.72rem;border-radius:999px;padding:2px 9px;border:1px solid var(--line);white-space:nowrap}
+.how.ask{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.how.fill{background:var(--hl)}
+
+/* lists of cards */
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.box{border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:10px;align-content:start;min-width:0}
+.box ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:.93rem}
+.box .eyebrow{color:var(--accent-text)}
+.funnel{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.funnel li{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:16px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+.funnel code{font-family:var(--f-mono);font-size:.82rem;overflow-wrap:anywhere}
+.funnel span{color:var(--muted);font-size:.93rem}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.kpi{background:var(--panel);border-radius:12px;padding:16px;display:grid;gap:6px}
+.kpi b{font-family:var(--f-display);font-weight:600;font-size:1.1rem}
+.kpi span{font-size:.9rem;color:var(--muted)}
+.qs{margin:0;padding:0;list-style:none;display:grid;gap:0}
+.qs li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.qs li .q{font-family:var(--f-mono);font-size:.8rem;color:var(--accent-text);padding-top:3px}
+.qs li p + p{color:var(--muted);font-size:.93rem;margin-top:4px}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+
+@media (max-width:960px){
+  .proto-grid{grid-template-columns:minmax(0,1fr)}
+  .why{position:static}
+  .steps-nav{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+}
+@media (max-width:820px){
+  .today,.three,.kpis{grid-template-columns:minmax(0,1fr)}
+  .friction{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .opts{grid-template-columns:minmax(0,1fr)}
+  .stage{padding:16px 10px 22px}
+  .wbody{padding:18px 16px 6px}
+  .wfoot{padding:12px 16px}
+  .funnel li{grid-template-columns:minmax(0,1fr);gap:4px}
+  .arrow{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .spin{animation-duration:2s} }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><i aria-hidden="true"></i>snoopie</div>
+    <div class="meta"><span>Proposal · <b>28 Oct 2026</b></span><span>For <b>Snoopie product &amp; engineering</b></span><span>Status <b>for review</b></span></div>
+  </div>
+
+  <div class="hero col">
+    <span class="eyebrow">First-alert onboarding</span>
+    <h1>From install to first alert, with <span class="mark">one thing to type</span>.</h1>
+    <p class="lede">Today a new merchant opens Snoopie to an empty page and an 8-field form. This proposal replaces that with three short steps. The only thing they type is the store they want to watch. Everything else is a sensible default or something Shopify already told us.</p>
+    <div class="counts" aria-label="Inputs before and after">
+      <div class="count"><strong>8</strong><span>fields on screen today,<br>7 required</span></div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div class="count after"><strong>1</strong><span>thing to type:<br>the competitor's URL</span></div>
+      <div class="count after"><strong>1</strong><span>choice, preselected:<br>what to watch for</span></div>
+    </div>
+  </div>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Today</span>
+      <h2>What a new install sees</h2>
+      <p class="lede">Redrawn from the current admin screens, with example data in place of real stores and emails.</p>
+    </header>
+    <div class="today">
+      <figure class="shot" style="margin:0">
+        <div class="screen" aria-label="Current empty state">
+          <div class="bar">⌂ › Alerts</div>
+          <div style="text-align:center;font-weight:650;font-size:13px;margin:6px 0 14px">Start tracking competitors now!</div>
+          <div class="card" style="display:grid;gap:7px">
+            <b style="font-size:11px">Get started</b>
+            <span>To get notified every time your competitors make a change, <b>create an Alert</b>.</span>
+            <span>Want to learn more? Check out our <u>Guide</u>.</span>
+            <span><span class="mini-btn">Create</span></span>
+          </div>
+          <span class="pin" style="left:62px;bottom:62px">1</span>
+        </div>
+        <figcaption>Empty state. The Guide link opens a Help Center page with one more button.</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="screen" aria-label="Current Create Alert modal">
+          <div class="card" style="padding:10px 12px">
+            <b style="font-size:12px;display:block;margin-bottom:8px">Create Alert</b>
+            <div class="mfield"><span><em>*</em> What do you want to track?</span><div></div></div>
+            <div class="mfield"><span><em>*</em> Who do you want to track?</span><div></div></div>
+            <div class="mfield"><span>Exclude collections (optional)</span><div></div></div>
+            <div class="mfield"><span><em>*</em> When should we notify you?</span><div></div></div>
+            <div class="mfield"><span><em>*</em> Price change threshold (%)</span><div></div></div>
+            <div class="mfield"><span><em>*</em> Where should we notify you?</span><div></div></div>
+            <div class="mfield"><span><em>*</em> Name your alert</span><div></div></div>
+            <div class="mfield"><span><em>*</em> Emails (maximum 10)</span><div></div></div>
+            <div style="text-align:right"><span class="mini-btn">Save</span></div>
+          </div>
+          <span class="pin" style="right:16px;top:16px">2</span>
+          <span class="pin" style="right:16px;top:106px">3</span>
+          <span class="pin" style="right:16px;top:131px">4</span>
+          <span class="pin" style="right:16px;top:183px">5</span>
+        </div>
+        <figcaption>Create opens every setting at once.</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="screen" aria-label="Current alerts table after saving">
+          <div class="bar">⌂ › Alerts</div>
+          <div class="card" style="margin-bottom:10px;display:grid;gap:5px"><b style="font-size:11px">Price History</b><span style="color:var(--a-muted)">Load a date range to preview price changes</span></div>
+          <div class="mtable">
+            <div><span>Competitor Name</span><span>Type</span><span>Status</span></div>
+            <div><span>Lumen Goods Alerts</span><span>Price Collection Change</span><span>Active</span></div>
+          </div>
+          <p style="margin-top:28px;text-align:center;color:var(--a-muted)">…then nothing, until the competitor changes something.</p>
+          <span class="pin" style="left:50%;bottom:22px;transform:translateX(-50%)">6</span>
+        </div>
+        <figcaption>After Save. No test, no word on what happens next.</figcaption>
+      </figure>
+    </div>
+    <ol class="friction">
+      <li><p><b>The empty state doesn't explain an alert.</b> One button, plus a Guide link to a page that holds another button. Nothing shows what a good first alert looks like.</p></li>
+      <li><p><b>Create opens a settings form, not a first step.</b> 8 fields on screen, 7 required, before the merchant has seen any value.</p></li>
+      <li><p><b>The trigger is a dropdown of long sentences.</b> Price changes, the feature we lead with on the listing, sits among equal options.</p></li>
+      <li><p><b>The threshold is an abstract percentage.</b> "10" means nothing until you see it as dollars on a real product.</p></li>
+      <li><p><b>We ask for things we already know.</b> The merchant types their own email, which Shopify gives us, and invents an alert name we could generate.</p></li>
+      <li><p><b>Silence after Save.</b> The first proof Snoopie works arrives whenever the competitor next changes something. Until then, an app that stays quiet looks like an app that doesn't work.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Goal</span>
+      <p class="goal">Every new install leaves its first session with a saved, verified alert and knows what the first email will look like.</p>
+    </header>
+  </section>
+
+  <section id="prototype">
+    <div class="proto-head">
+      <header style="display:grid;gap:10px">
+        <span class="eyebrow">Proposed flow · clickable prototype</span>
+        <h2>Try it</h2>
+        <p class="lede">Click through as a new merchant. Store, products and email are example data.</p>
+      </header>
+      <button class="restart" id="restart" type="button">Restart prototype</button>
+    </div>
+    <div class="proto-grid">
+      <div class="frame" id="frame">
+        <div class="frame-bar">
+          <span class="crumb"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 2.5 2 9.2l1.1 1.3 1.4-1.2V17h4.3v-4.5h2.4V17h4.3V9.3l1.4 1.2L18 9.2z"/></svg><span id="crumb">Snoopie</span></span>
+          <span class="dots" aria-hidden="true">···</span>
+        </div>
+        <div class="stage" id="stage" aria-live="polite"></div>
+      </div>
+      <aside class="why" aria-label="Why each step">
+        <ol class="steps-nav" id="nav"></ol>
+        <div class="why-card" id="why"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Field by field</span>
+      <h2>Where each of today's fields goes</h2>
+      <p class="lede">Nothing is removed from the product. The full Create Alert form stays for second and later alerts.</p>
+    </header>
+    <div class="tablebox">
+      <table class="ft">
+        <thead><tr><th>Today's field</th><th>In onboarding</th><th>How</th></tr></thead>
+        <tbody>
+          <tr><td>What do you want to track?</td><td><span class="how ask">Asked · step 1</span></td><td>Two-way toggle above the URL: Shopify store (default) or Amazon product (US).</td></tr>
+          <tr><td>Who do you want to track?</td><td><span class="how ask">Asked · step 1</span></td><td>The one thing the merchant types. Verified inline; Snoopie shows the store name back.</td></tr>
+          <tr><td>When should we notify you?</td><td><span class="how ask">Asked · step 2</span></td><td>Four cards in plain words. Price changes preselected.</td></tr>
+          <tr><td>Price change threshold (%)</td><td><span class="how fill">Defaulted</span></td><td>10% preselected, with Any change / 5 / 20 / custom, and a live dollar example.</td></tr>
+          <tr><td>Exclude collections</td><td><span class="how">Folded away</span></td><td>Optional disclosure: "Skip some collections". Same 10-line limit.</td></tr>
+          <tr><td>Where should we notify you?</td><td><span class="how fill">Defaulted</span></td><td>Email. Slack and Discord offered on the Alerts page checklist once the alert exists.</td></tr>
+          <tr><td>Name your alert</td><td><span class="how fill">Prefilled</span></td><td>"{Store} · {trigger}", editable. Still becomes the email subject.</td></tr>
+          <tr><td>Emails</td><td><span class="how fill">Prefilled</span></td><td>Shop owner's email from the Shopify shop record. Add up to 10.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">After the wizard</span>
+      <h2>Keep guiding until the first real alert lands</h2>
+    </header>
+    <div class="three">
+      <div class="box">
+        <span class="eyebrow">On the Alerts page</span>
+        <h3>Setup checklist</h3>
+        <ul>
+          <li>Create first alert, send a test alert, connect Slack or Discord, open Price History.</li>
+          <li>Stays until all four are done or the merchant dismisses it.</li>
+          <li>Merchants who skipped the wizard land here with one button to resume it.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="eyebrow">In the alerts table</span>
+        <h3>Say what "Active" means</h3>
+        <ul>
+          <li>Status reads <b>Watching · no changes yet</b> until the first alert fires, then the date of the last change.</li>
+          <li>One line under the table: no email yet means the competitor hasn't changed anything.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="eyebrow">By email</span>
+        <h3>One nudge, one celebration</h3>
+        <ul>
+          <li>24 hours after install with no alert: a short email with a link straight into step 1.</li>
+          <li>First real alert: append one line, "This is your first Snoopie alert", plus a link to Price History.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Measure</span>
+      <h2>Events to add and what we judge it on</h2>
+      <p class="lede">Pull today's baseline from these events before launch, then set targets. If install volume is too low for a split test, compare the 30 days before and after launch.</p>
+    </header>
+    <ul class="funnel">
+      <li><code>onboarding_viewed</code><span>Step 1 rendered for a shop with zero alerts.</span></li>
+      <li><code>competitor_verified</code><span>Verify succeeded. Log source (Shopify / Amazon) and failures with reason.</span></li>
+      <li><code>trigger_selected</code><span>Which trigger, and whether the threshold was changed from 10%.</span></li>
+      <li><code>first_alert_saved</code><span>Alert created from onboarding. Log seconds since install.</span></li>
+      <li><code>test_alert_sent</code><span>From the success screen or the checklist.</span></li>
+      <li><code>onboarding_skipped</code><span>Which step they left from.</span></li>
+      <li><code>first_alert_delivered</code><span>The first real change notification reached the merchant.</span></li>
+    </ul>
+    <div class="kpis">
+      <div class="kpi"><b>Install → alert saved</b><span>Share of installs with a saved alert within 24 hours. Primary metric.</span></div>
+      <div class="kpi"><b>Install → first alert delivered</b><span>Within 7 days. Shows whether the defaults pick alerts that actually fire.</span></div>
+      <div class="kpi"><b>14-day retention</b><span>Still installed two weeks later, compared against the pre-launch cohort.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Build scope</span>
+      <h2>Most of it reuses what exists</h2>
+    </header>
+    <div class="three">
+      <div class="box">
+        <span class="eyebrow">Frontend only</span>
+        <ul>
+          <li>3-step wizard calling the existing create-alert and verify endpoints.</li>
+          <li>Prefill email from the shop record; generate alert name.</li>
+          <li>Trigger cards, threshold presets and dollar example.</li>
+          <li>Checklist card and the "Watching · no changes yet" status.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="eyebrow">Small backend</span>
+        <ul>
+          <li>Send-test-alert endpoint using the real email template and sender.</li>
+          <li>Verify returns store name and, if cheap, product and collection counts.</li>
+          <li>Per-shop flags: onboarding done, checklist dismissed.</li>
+          <li>24-hour nudge email and first-alert line.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="eyebrow">Rollout</span>
+        <ul>
+          <li>New installs see the wizard on first open.</li>
+          <li>Existing shops with zero alerts see it on their next open.</li>
+          <li>Shops with alerts see nothing new except the clearer status.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <header class="col">
+      <span class="eyebrow">Open questions</span>
+      <h2>Decide before we build</h2>
+    </header>
+    <ul class="qs">
+      <li><span class="q">Q1</span><div><p>How often does Snoopie check a store?</p><p>The success screen should say when the merchant can expect to hear from us. Right now it can only say "the moment it happens".</p></div></li>
+      <li><span class="q">Q2</span><div><p>Can verify return the store name and product count?</p><p>Showing "Lumen Goods · 248 products" back is what makes step 1 feel like Snoopie found the right store. Store name alone is enough to ship.</p></div></li>
+      <li><span class="q">Q3</span><div><p>Price changes as the default, or new products?</p><p>Recommendation: price. It's the listing's lead, and the 10% threshold keeps the volume sane. New products may fire sooner on busy stores; the 7-day delivery metric will tell us.</p></div></li>
+      <li><span class="q">Q4</span><div><p>The plan includes one alert. What happens when the merchant wants a different competitor later?</p><p>Edit should allow changing the URL so they don't have to delete and recreate. Worth checking before we point people at "change it later".</p></div></li>
+      <li><span class="q">Q5</span><div><p>Should the test alert use the real sending path?</p><p>Recommendation: yes. It proves deliverability and lets us tell merchants to check spam on day one, not on the day a real alert gets lost.</p></div></li>
+      <li><span class="q">Q6</span><div><p>Stock alerts stay out of onboarding.</p><p>They're on the listing but not in the current trigger menu. Add a card once the trigger ships.</p></div></li>
+    </ul>
+  </section>
+
+  <footer>Built from the Snoopie admin screens captured 19 and 25 Sep 2026. All stores, products and emails in the mockups are examples.</footer>
+</div>
+
+<script>
+(function(){
+  var OWNER = 'john.doe@example.com';
+  var DEMO = { shopify:'lumen-goods.myshopify.com', amazon:'https://www.amazon.com/dp/B0DEMO1234' };
+  var TRIGGERS = [
+    { id:'price',  label:'Price changes', desc:"A product's price goes up or down", short:'price changes', type:'Price Collection Change', tag:'Recommended' },
+    { id:'add',    label:'New products', desc:'They add a product to the store', short:'new products', type:'Product Added' },
+    { id:'remove', label:'Removed products', desc:'They take a product down', short:'removed products', type:'Product Removed' },
+    { id:'text',   label:'Name or description changes', desc:'They rewrite a title or description', short:'listing edits', type:'Name/Description Change' }
+  ];
+  var NAV = [
+    { id:'who',    n:'1', label:'Who to watch' },
+    { id:'what',   n:'2', label:'What to watch for' },
+    { id:'where',  n:'3', label:'Where to send it' },
+    { id:'done',   n:'✓', label:'Success screen' },
+    { id:'alerts', n:'→', label:'Alerts page after' }
+  ];
+  var WHY = {
+    who: { h:'Ask for the one thing only the merchant knows', li:[
+      'The competitor URL is the only input Snoopie cannot guess, so it is the whole first step.',
+      'Verify runs inline and shows the store name back, so the merchant knows Snoopie found the right store.',
+      'Amazon stays one tap away as a toggle instead of a dropdown.',
+      '<span class="eng">needs eng</span> store name and product count from the verify call.'
+    ]},
+    what: { h:'Plain choices, price first', li:[
+      'The dropdown becomes four cards written the way a merchant would say them.',
+      'Price changes is preselected because it is what the listing leads with.',
+      '10% stays the default, now shown as dollars on an example product.',
+      'Exclude collections folds away. It is tuning, not a first-run decision.'
+    ]},
+    where: { h:'Fill in what we already know', li:[
+      'Email comes from the Shopify shop owner. The merchant only checks it.',
+      'The alert name is generated from store and trigger, and still becomes the email subject.',
+      'Slack and Discord are store-wide settings, so they move to the checklist once the alert exists.'
+    ]},
+    done: { h:'Close the silence gap', li:[
+      'Show exactly what the alert email will look like.',
+      'A test alert proves delivery today, not whenever the competitor next moves.',
+      'Without this, the first sign that Snoopie works could be days away.',
+      '<span class="eng">needs eng</span> send-test-alert endpoint.'
+    ]},
+    alerts: { h:'Keep guiding after the wizard', li:[
+      'A setup checklist stays on the Alerts page until it is done or dismissed.',
+      'Status reads "Watching · no changes yet" instead of a bare "Active".',
+      'Merchants who skipped land here with one button to resume.'
+    ]}
+  };
+
+  var s;
+  function reset(){
+    s = { step:'who', source:'shopify', url:'', verified:false, verifying:false, err:'', trigger:'price',
+          threshold:10, custom:false, emails:[OWNER], name:'', nameEdited:false, created:false, testSent:false, skipped:false, toast:'' };
+  }
+  reset();
+
+  var stage = document.getElementById('stage');
+  var crumb = document.getElementById('crumb');
+  var toastTimer;
+
+  function esc(t){ return String(t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function trig(){ for (var i=0;i<TRIGGERS.length;i++) if (TRIGGERS[i].id===s.trigger) return TRIGGERS[i]; return TRIGGERS[0]; }
+  function host(u){ return u.trim().replace(/^https?:\/\//i,'').replace(/^www\./i,'').replace(/\/+$/,''); }
+  function storeName(){
+    if (s.source==='amazon'){
+      var m = s.url.match(/(B0[A-Z0-9]{8})/i);
+      return m ? 'Amazon ' + m[1].toUpperCase() : 'Amazon product';
+    }
+    var h = host(s.url).split('/')[0].replace(/\.myshopify\.com$/i,'').replace(/\.[a-z.]+$/i,'');
+    var n = h.split(/[-_.]+/).filter(Boolean).map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join(' ');
+    return n || 'Competitor';
+  }
+  function seed(str){ var h=0; for (var i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))>>>0; return h; }
+  function autoName(){ return storeName() + ' · ' + trig().short; }
+  function money(v){ return '$' + v.toFixed(2); }
+
+  function validate(){
+    var u = s.url.trim();
+    if (!u) return 'Paste a store address to continue.';
+    if (s.source==='shopify'){
+      if (/amazon\./i.test(u)) return 'That looks like an Amazon link. Switch to Amazon product above.';
+      if (/\s/.test(u) || u.indexOf('.')<0) return 'Enter a store address like lumen-goods.com or a collection URL.';
+    } else {
+      if (!/(B0[A-Z0-9]{8})/i.test(u)) return 'Paste an amazon.com product link or a 10-character ASIN.';
+    }
+    return '';
+  }
+
+  function progress(n){
+    var segs=''; for (var i=1;i<=3;i++) segs += '<i class="'+(i<=n?'on':'')+'"></i>';
+    return '<div class="progress"><span class="segs" aria-hidden="true">'+segs+'</span>Step '+n+' of 3</div>';
+  }
+  function foot(n, backTo, nextLabel, nextOk){
+    return '<div class="wfoot">' +
+      '<button class="btn link" type="button" data-act="skip">Skip for now</button>' +
+      '<div class="right">' + (backTo ? '<button class="btn" type="button" data-go="'+backTo+'">Back</button>' : '') +
+      '<button class="btn primary" type="button" data-act="next" '+(nextOk?'':'disabled')+'>'+nextLabel+'</button></div></div>';
+  }
+
+  function viewWho(){
+    var found = '';
+    if (s.verifying) found = '<div class="found"><span class="spin" aria-hidden="true"></span><span class="hint">Checking the store…</span></div>';
+    else if (s.verified){
+      var nm = storeName(), sd = seed(s.url);
+      var sub = s.source==='shopify'
+        ? esc(host(s.url)) + ' · ' + (120 + sd % 380) + ' products · ' + (6 + sd % 18) + ' collections'
+        : 'amazon.com · tracked for price';
+      found = '<div class="found"><div class="logo" aria-hidden="true">'+esc(nm.replace(/^Amazon /,'').slice(0,2).toUpperCase())+'</div>' +
+        '<div class="what"><b>'+esc(nm)+'</b><span>'+sub+'</span></div><span class="badge">✓ Found</span></div>';
+    }
+    return '<div class="wcard"><div class="wbody">' +
+      '<div class="welcome"><i aria-hidden="true"></i>Welcome to Snoopie. Three quick steps to your first alert.</div>' +
+      progress(1) +
+      '<h3 class="wtitle">Who do you want to keep an eye on?</h3>' +
+      '<p class="wsub">Paste a competitor\'s store. Snoopie watches it and tells you when something changes.</p>' +
+      '<div class="seg" role="group" aria-label="What to track">' +
+        '<button type="button" data-src="shopify" aria-pressed="'+(s.source==='shopify')+'">Shopify store</button>' +
+        '<button type="button" data-src="amazon" aria-pressed="'+(s.source==='amazon')+'">Amazon product (US)</button></div>' +
+      '<div class="fld"><label for="p-url">'+(s.source==='shopify'?'Store or collection URL':'Amazon product URL or ASIN')+'</label>' +
+        '<div class="row"><input class="in" id="p-url" autocomplete="off" spellcheck="false" placeholder="'+(s.source==='shopify'?'e.g. lumen-goods.com':'e.g. https://www.amazon.com/dp/B0…')+'" value="'+esc(s.url)+'">' +
+        '<button class="btn" type="button" data-act="verify">Verify</button></div>' +
+        '<div id="p-msg">'+(s.err?'<p class="err">'+esc(s.err)+'</p>':'<p class="hint">'+(s.source==='shopify'?'A whole store, or one collection like /collections/summer. Both stores need to be on Shopify.':'US store only for now.')+'</p>')+'</div>' +
+        (s.url || s.verified ? '' : '<div><button class="textlink" type="button" data-act="demo">Use an example '+(s.source==='shopify'?'store':'product')+'</button></div>') +
+      '</div>' + found +
+      '</div>' + foot(1, null, 'Continue', s.verified) + '</div>';
+  }
+
+  function thresholdExample(){
+    var base = 40, t = s.threshold;
+    if (!t) return 'You\'ll hear about every price move, even $0.01. Busy stores can send a lot of email.';
+    var lo = base*(1-t/100), hi = base*(1+t/100);
+    return 'Example: a <b>'+money(base)+'</b> product at '+esc(storeName())+' would need to drop to <b>'+money(lo)+'</b> or rise to <b>'+money(hi)+'</b>.';
+  }
+
+  function viewWhat(){
+    var list = s.source==='amazon' ? [TRIGGERS[0]] : TRIGGERS;
+    var cards = list.map(function(t){
+      return '<button type="button" class="opt" role="radio" aria-checked="'+(s.trigger===t.id)+'" data-trig="'+t.id+'">' +
+        '<b>'+t.label+(t.tag?' <span class="tag">'+t.tag+'</span>':'')+'</b><span>'+t.desc+'</span></button>';
+    }).join('');
+    var presets = [[0,'Any change'],[5,'5%'],[10,'10%'],[20,'20%']].map(function(p){
+      return '<button type="button" class="chip" data-th="'+p[0]+'" aria-pressed="'+(!s.custom && s.threshold===p[0])+'">'+p[1]+'</button>';
+    }).join('');
+    var thresh = s.trigger!=='price' ? '' :
+      '<div class="thresh"><div class="fld" style="gap:8px"><span style="font-size:13px;font-weight:550" id="th-l">Tell me when a price moves by</span>' +
+      '<div class="chips" role="group" aria-labelledby="th-l">'+presets +
+      '<button type="button" class="chip" data-th="custom" aria-pressed="'+s.custom+'">Custom</button>' +
+      (s.custom ? '<label class="hint" style="display:flex;gap:6px;align-items:center"><input class="in chip-in" id="p-th" type="number" min="0" max="100" value="'+s.threshold+'" aria-label="Custom threshold percent">%</label>' : '') +
+      '</div></div><p class="example" id="p-ex">'+thresholdExample()+'</p></div>';
+    var exclude = (s.source==='shopify' && s.trigger!=='text') ?
+      '<details class="more"><summary>Skip some collections (optional)</summary>' +
+      '<div class="fld"><label for="p-ex-c" class="hint" style="font-weight:400">One collection URL per line, up to 10. Handy for sale or outlet pages that change all the time.</label>' +
+      '<textarea class="in" id="p-ex-c" placeholder="/collections/sale&#10;/collections/outlet"></textarea></div></details>' : '';
+    return '<div class="wcard"><div class="wbody">' + progress(2) +
+      '<h3 class="wtitle">What should Snoopie watch for?</h3>' +
+      '<p class="wsub">Pick one to start with. You can change it any time.</p>' +
+      (s.source==='amazon' ? '<p class="hint">Amazon alerts track price.</p>' : '') +
+      '<div class="opts" role="radiogroup" aria-label="Alert trigger">'+cards+'</div>' + thresh + exclude +
+      '</div>' + foot(2, 'who', 'Continue', true) + '</div>';
+  }
+
+  function viewWhere(){
+    if (!s.nameEdited) s.name = autoName();
+    var tags = s.emails.map(function(e,i){
+      return '<span class="etag">'+esc(e)+'<button type="button" data-rm="'+i+'" aria-label="Remove '+esc(e)+'">×</button></span>';
+    }).join('');
+    return '<div class="wcard"><div class="wbody">' + progress(3) +
+      '<h3 class="wtitle">Where should we send it?</h3>' +
+      '<p class="wsub">We filled this in from your Shopify account. Change anything you like.</p>' +
+      '<div class="fld"><label for="p-em">Email alerts to</label>' +
+        '<div class="emails">'+tags+(s.emails.length<10?'<input id="p-em" placeholder="Add another email" autocomplete="off">':'')+'</div>' +
+        '<p class="hint" id="p-em-msg">'+s.emails.length+' of 10. Press Enter to add.</p></div>' +
+      '<div class="fld"><label for="p-name">Alert name</label>' +
+        '<input class="in" id="p-name" value="'+esc(s.name)+'">' +
+        '<p class="hint">This becomes the subject line of every alert email.</p></div>' +
+      '<div class="note"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+        '<span>Prefer Slack or Discord? You can connect them from your Alerts page once this alert is running.</span></div>' +
+      '</div>' + foot(3, 'what', 'Start watching', s.emails.length>0 && s.name.trim()) + '</div>';
+  }
+
+  function mailPreview(){
+    var t = trig(), body;
+    if (t.id==='price') body =
+      '<p><b>Snoopie has news!!</b><br>Your competitor store just played with their pricing 👀</p>' +
+      '<div class="kv"><span>SKU Name</span><b>LINEN OVERSHIRT - SAND</b><span>Variant</span><b>M</b><span>Price earlier</span><b>$68.00</b><span>Price now</span><b>$54.00</b></div>';
+    else if (t.id==='add') body = '<p><b>Snoopie has news!!</b><br>Your competitor just added a new product 👀</p><div class="kv"><span>SKU Name</span><b>WAXED CANVAS TOTE</b><span>Price</span><b>$48.00</b></div>';
+    else if (t.id==='remove') body = '<p><b>Snoopie has news!!</b><br>Your competitor just took a product down 👀</p><div class="kv"><span>SKU Name</span><b>LINEN OVERSHIRT - SAND</b><span>Last price</span><b>$68.00</b></div>';
+    else body = '<p><b>Snoopie has news!!</b><br>Your competitor just rewrote a product listing 👀</p><div class="kv"><span>Before</span><b>Linen Overshirt</b><span>Now</span><b>Relaxed Linen Overshirt</b></div>';
+    return '<div class="mail"><div class="mail-head"><b>'+esc(s.name)+'</b><span>Snoopie · to '+esc(s.emails[0]||OWNER)+'</span></div>' +
+      '<div class="mail-body"><span class="wm">snoopie</span>'+body+'<p>Detective Snoopie will be on the lookout for future changes 🙂</p></div></div>' +
+      '<p class="mail-cap">'+(t.id==='price'?'Wording from the live price alert template. Product is an example.':'Illustrative. Uses the live template\'s greeting and sign-off.')+'</p>';
+  }
+
+  function viewDone(){
+    var t = trig();
+    return '<div class="wcard"><div class="wbody">' +
+      '<div class="done-top"><div class="seal" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#1A1A1A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+      '<div><h3 class="wtitle">Snoopie is on the case.</h3><p class="wsub">Watching '+esc(storeName())+' for '+t.short+'.</p></div></div>' +
+      '<dl class="summary"><dt>Watching</dt><dd>'+esc(s.source==='shopify'?host(s.url):s.url.trim())+'</dd><dt>For</dt><dd>'+t.label+
+        (t.id==='price'?' of '+(s.threshold?s.threshold+'% or more':'any size'):'')+'</dd><dt>Emails</dt><dd>'+esc(s.emails.join(', '))+'</dd></dl>' +
+      '<p style="font-size:13.5px">You\'ll get an email the moment it happens. Here\'s what it looks like:</p>' + mailPreview() +
+      '</div><div class="wfoot"><button class="btn" type="button" data-act="test">'+(s.testSent?'Send another test':'Send me a test alert')+'</button>' +
+      '<div class="right"><button class="btn primary" type="button" data-go="alerts">Go to my alerts</button></div></div></div>';
+  }
+
+  function viewAlerts(){
+    var steps = [
+      { done:s.created, b:'Create your first alert', d:'Pick a competitor and what to watch for.', act: s.created?'':'<button class="btn primary" type="button" data-go="who">Create first alert</button>' },
+      { done:s.testSent, b:'Send a test alert', d:'Check it lands in your inbox, not spam.', act: (s.created && !s.testSent)?'<button class="btn" type="button" data-act="test">Send test</button>':'' },
+      { done:false, b:'Get alerts in Slack or Discord', d:'Optional. Post alerts to a team channel.', act:'<button class="btn" type="button" data-act="toast-int">Connect</button>' },
+      { done:false, b:'Open Price History', d:'Fills in after the first price change.', act:'' }
+    ];
+    var n = steps.filter(function(x){return x.done;}).length;
+    var items = steps.map(function(x){
+      return '<li class="'+(x.done?'isdone':'')+'"><span class="tick '+(x.done?'on':'')+'" aria-hidden="true">'+(x.done?'<svg width="11" height="11" viewBox="0 0 12 12"><path d="M2.5 6.3l2.3 2.3L9.6 3.6" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</span>' +
+        '<span class="txt"><b>'+x.b+'</b><span>'+(x.done?'Done':x.d)+'</span></span>'+x.act+'</li>';
+    }).join('');
+    var t = trig();
+    var table = s.created ?
+      '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Competitor</th><th>Watching for</th><th>Notify</th><th>Status</th></tr></thead><tbody><tr>' +
+      '<td>'+esc(s.name)+'<small>'+esc(s.source==='shopify'?host(s.url):'amazon.com')+'</small></td>' +
+      '<td>'+t.label+(t.id==='price'?'<small>'+(s.threshold?s.threshold+'% or more':'Any change')+'</small>':'')+'</td>' +
+      '<td>Email<small>'+s.emails.length+' recipient'+(s.emails.length>1?'s':'')+'</small></td>' +
+      '<td><span class="badge">Watching</span><small style="margin-top:4px">No changes yet</small></td></tr></tbody></table></div>' +
+      '<p class="hint" style="text-align:center">No email yet means '+esc(storeName())+' hasn\'t changed anything. You\'ll hear from Snoopie the moment it does.</p>'
+      :
+      '<div class="empty"><b>No alerts yet</b><p class="hint">Snoopie can\'t watch anyone until you tell it who. It takes three quick steps.</p><button class="btn primary" type="button" data-go="who">Create your first alert</button></div>';
+    return '<div class="page"><div class="check"><div class="check-head"><b>Finish setting up Snoopie</b><span class="badge soft">'+n+' of 4 done</span></div>' +
+      '<div class="pbar" aria-hidden="true"><i style="width:'+(n*25)+'%"></i></div><ul class="items">'+items+'</ul></div>' + table + '</div>';
+  }
+
+  function render(focusId){
+    crumb.textContent = s.step==='alerts' ? 'Alerts' : 'Snoopie';
+    var v = { who:viewWho, what:viewWhat, where:viewWhere, done:viewDone, alerts:viewAlerts }[s.step]();
+    stage.innerHTML = v + (s.toast ? '<div class="toast" role="status">'+esc(s.toast)+'</div>' : '');
+    renderSide();
+    if (focusId){ var el = document.getElementById(focusId); if (el){ el.focus(); if (el.setSelectionRange && el.value) el.setSelectionRange(el.value.length, el.value.length); } }
+  }
+
+  function renderSide(){
+    document.getElementById('nav').innerHTML = NAV.map(function(x){
+      return '<li><button type="button" data-jump="'+x.id+'" '+(s.step===x.id?'aria-current="step"':'')+'><span class="n">'+x.n+'</span>'+x.label+'</button></li>';
+    }).join('');
+    var w = WHY[s.step];
+    document.getElementById('why').innerHTML = '<span class="eyebrow">Why this step</span><h3>'+w.h+'</h3><ul>'+w.li.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul>';
+  }
+
+  function showToast(msg){
+    s.toast = msg; render();
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ s.toast=''; var t = stage.querySelector('.toast'); if (t) t.remove(); }, 4200);
+  }
+
+  function verify(){
+    s.err = validate();
+    if (s.err){ s.verified=false; render('p-url'); return; }
+    s.verifying = true; render();
+    setTimeout(function(){ s.verifying=false; s.verified=true; s.nameEdited=false; render(); }, 750);
+  }
+
+  function fillDemo(){
+    if (!s.verified){ s.url = DEMO[s.source]; s.verified = true; s.err=''; }
+  }
+
+  var STEP_IDS = { who:1, what:1, where:1, done:1, alerts:1 };
+  function syncHash(step){
+    if (!STEP_IDS[step]) return;
+    var target = '#step=' + step;
+    if (location.hash !== target) history.replaceState(null, '', target);
+  }
+  function scrollToPrototype(){
+    var el = document.getElementById('prototype');
+    if (!el) return;
+    el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start' });
+  }
+  function applyHash(){
+    var m = location.hash.match(/^#step=(who|what|where|done|alerts)$/);
+    if (!m) return;
+    if (m[1] === s.step) { scrollToPrototype(); return; }
+    jump(m[1]);
+  }
+
+  function go(step){
+    if (step==='who' && s.step==='alerts' && !s.created){ s.skipped=false; }
+    if (step==='alerts' && (s.step==='done')) s.created = true;
+    s.step = step; s.toast=''; render();
+    syncHash(step);
+    scrollToPrototype();
+  }
+
+  function jump(step){
+    if (step==='who'){ go('who'); return; }
+    fillDemo();
+    if (!s.nameEdited) s.name = autoName();
+    if (step==='alerts' || step==='done') s.created = true;
+    go(step);
+  }
+
+  function addEmail(inp){
+    var v = inp.value.trim().replace(/,$/,'');
+    var msg = document.getElementById('p-em-msg');
+    if (!v) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ msg.className='err'; msg.textContent='"'+v+'" isn\'t an email address. Check for typos.'; return; }
+    if (s.emails.indexOf(v)>=0){ msg.className='err'; msg.textContent='That email is already on the list.'; return; }
+    if (s.emails.length>=10){ msg.className='err'; msg.textContent='Up to 10 emails per alert.'; return; }
+    s.emails.push(v); render('p-em');
+  }
+
+  stage.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.src && b.dataset.src!==s.source){ s.source=b.dataset.src; s.url=''; s.verified=false; s.err=''; s.trigger='price'; render(); return; }
+    if (b.dataset.trig){ s.trigger=b.dataset.trig; s.nameEdited=false; render(); return; }
+    if (b.dataset.th){
+      if (b.dataset.th==='custom'){ s.custom=true; render('p-th'); }
+      else { s.custom=false; s.threshold=+b.dataset.th; render(); }
+      return;
+    }
+    if (b.dataset.rm){ s.emails.splice(+b.dataset.rm,1); render(); return; }
+    if (b.dataset.go){ go(b.dataset.go); return; }
+    var a = b.dataset.act;
+    if (a==='verify') verify();
+    else if (a==='demo'){ s.url = DEMO[s.source]; s.err=''; render('p-url'); verify(); }
+    else if (a==='next'){ go({who:'what', what:'where', where:'done'}[s.step]); }
+    else if (a==='skip'){ s.skipped=true; s.created=false; go('alerts'); }
+    else if (a==='test'){ s.testSent=true; showToast('Test alert sent to ' + s.emails.join(', ') + '. Not there in a minute? Check spam and mark Snoopie as safe.'); }
+    else if (a==='toast-int'){ showToast('Opens the existing Slack and Discord settings.'); }
+  });
+
+  stage.addEventListener('input', function(e){
+    var t = e.target;
+    if (t.id==='p-url'){
+      s.url = t.value;
+      if (s.verified || s.err){ s.verified=false; s.err=''; render('p-url'); }
+      var demo = stage.querySelector('[data-act="demo"]'); if (demo && t.value) demo.parentNode.remove();
+    }
+    if (t.id==='p-th'){
+      var v = Math.max(0, Math.min(100, parseFloat(t.value)||0)); s.threshold=v;
+      document.getElementById('p-ex').innerHTML = thresholdExample();
+    }
+    if (t.id==='p-name'){
+      s.name=t.value; s.nameEdited=true;
+      var nx = stage.querySelector('[data-act="next"]'); if (nx) nx.disabled = !(s.emails.length && s.name.trim());
+    }
+  });
+
+  stage.addEventListener('keydown', function(e){
+    if (e.key==='Enter' && e.target.id==='p-url'){ e.preventDefault(); verify(); }
+    if ((e.key==='Enter' || e.key===',') && e.target.id==='p-em'){ e.preventDefault(); addEmail(e.target); }
+    if (e.key==='Backspace' && e.target.id==='p-em' && !e.target.value && s.emails.length){ s.emails.pop(); render('p-em'); }
+  });
+
+  document.getElementById('nav').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-jump]'); if (b) jump(b.dataset.jump);
+  });
+  document.getElementById('restart').addEventListener('click', function(){ reset(); render(); syncHash('who'); });
+
+  window.addEventListener('hashchange', applyHash);
+
+  render();
+  if (location.hash) applyHash();
+  else syncHash('who');
+})();
+</script>
+
+</body></html>
