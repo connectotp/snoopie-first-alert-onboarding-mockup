@@ -2,9 +2,9 @@
 
 Interactive product proposal for [vrkllc360/snoopie#59](https://github.com/vrkllc360/snoopie/issues/59).
 
-**Live site (after GitHub Pages deploy):** https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/
+**Live site:** https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/
 
-Source also lives in the main app repo at `docs/prototypes/first-alert-onboarding/` for version control.
+This folder is the source of truth in the app repo. The public GitHub Pages site is [connectotp/snoopie-first-alert-onboarding-mockup](https://github.com/connectotp/snoopie-first-alert-onboarding-mockup).
 
 ## Prototype screens (direct links)
 
@@ -19,6 +19,12 @@ Source also lives in the main app repo at `docs/prototypes/first-alert-onboardin
 
 Short paths (redirect to the hash above):
 
-- `/steps/who/`, `/steps/what/`, `/steps/where/`, `/steps/done/`, `/steps/alerts/`
+- https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/steps/who/
+- https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/steps/what/
+- https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/steps/where/
+- https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/steps/done/
+- https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/steps/alerts/
 
-Same pattern as [snoopie-price-alert-threshold-mockup](https://github.com/connectotp/snoopie-price-alert-threshold-mockup).
+On step 1, use **Use an example store** (or the sidebar) to click through without typing.
+
+Same hosting pattern as [snoopie-price-alert-threshold-mockup](https://github.com/connectotp/snoopie-price-alert-threshold-mockup).

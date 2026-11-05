@@ -1,9 +1,16 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Snoopie First-Alert Onboarding</title>
+<meta name="description" content="Clickable prototype of Snoopie first-alert onboarding: three steps from competitor URL to a saved, verified alert.">
+<link rel="canonical" href="https://connectotp.github.io/snoopie-first-alert-onboarding-mockup/">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <style>
 /* Layout: one reading column for the argument, widening to a prototype + rationale split for the live demo.
    Page wears Snoopie's ink-and-icon-gradient; the prototype frame stays Shopify-admin light on purpose. */
@@ -258,7 +265,8 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-si
 }
 @media (prefers-reduced-motion:reduce){ .spin{animation-duration:2s} }
 </style>
-
+</head>
+<body>
 <div class="wrap">
   <div class="top">
     <div class="brand"><i aria-hidden="true"></i>snoopie</div>
@@ -784,23 +792,28 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-si
     var m = location.hash.match(/^#step=(who|what|where|done|alerts)$/);
     if (!m) return;
     if (m[1] === s.step) { scrollToPrototype(); return; }
-    jump(m[1]);
+    jump(m[1], true);
   }
 
-  function go(step){
+  function go(step, fromHash){
     if (step==='who' && s.step==='alerts' && !s.created){ s.skipped=false; }
     if (step==='alerts' && (s.step==='done')) s.created = true;
     s.step = step; s.toast=''; render();
     syncHash(step);
-    scrollToPrototype();
+    if (fromHash) {
+      scrollToPrototype();
+      return;
+    }
+    var fr = document.getElementById('frame').getBoundingClientRect();
+    if (fr.top < 0) document.getElementById('frame').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start' });
   }
 
-  function jump(step){
-    if (step==='who'){ go('who'); return; }
+  function jump(step, fromHash){
+    if (step==='who'){ go('who', fromHash); return; }
     fillDemo();
     if (!s.nameEdited) s.name = autoName();
     if (step==='alerts' || step==='done') s.created = true;
-    go(step);
+    go(step, fromHash);
   }
 
   function addEmail(inp){
